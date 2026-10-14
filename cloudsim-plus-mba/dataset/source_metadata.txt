@@ -1,0 +1,17 @@
+Source: Google Cluster Workload Trace Version 1
+Official documentation: https://github.com/google/cluster-data/blob/master/TraceVersion1.md
+Official download: http://commondatastorage.googleapis.com/clusterdata-misc/google-cluster-data-1.csv.gz
+SHA1: 98c87f059aa1cc37f1e9523ac691ee0fd5629188
+License: Creative Commons Attribution (CC-BY)
+
+The raw trace records normalized CPU and memory demand. It does not contain
+lengthMI or absolute RAM, so prepare_google_trace.py maps normalized fields to
+the simulator schema:
+
+  - lengthMI = max(1, round(NrmlTaskCores * 1_000_000))
+  - pes      = max(1, min(4, ceil(NrmlTaskCores * 32)))
+  - ramMB    = max(1024, round(NrmlTaskMem * 64 * 1024))
+  - priority = JobType
+
+tasks.csv is therefore a trace-derived dataset; lengthMI and ramMB are proxies
+because the Version 1 trace does not expose absolute execution time or memory.
